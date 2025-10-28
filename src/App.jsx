@@ -1,6 +1,5 @@
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
-import { useEffect } from 'react'
 import LoginPage from './pages/LoginPage'
 import SubmissionForm from './pages/SubmissionForm'
 import AdminLogin from './pages/AdminLogin'
@@ -9,22 +8,6 @@ import './App.css'
 
 // Debug logging
 console.log('App.jsx loaded')
-
-// Component to handle redirects from 404 page
-function RedirectHandler() {
-  const navigate = useNavigate()
-  
-  useEffect(() => {
-    const redirect = sessionStorage.getItem('redirect')
-    if (redirect) {
-      sessionStorage.removeItem('redirect')
-      console.log('Redirecting to:', redirect)
-      navigate(redirect, { replace: true })
-    }
-  }, [navigate])
-  
-  return null
-}
 
 // ProtectedRoute component to guard routes that require authentication
 function ProtectedRoute({ children }) {
@@ -52,7 +35,6 @@ function App() {
   
   return (
     <Router>
-      <RedirectHandler />
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route
