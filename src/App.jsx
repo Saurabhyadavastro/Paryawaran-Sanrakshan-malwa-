@@ -37,6 +37,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<LoginPage />} />
+        <Route path="/index.html" element={<Navigate to="/" replace />} />
         <Route
           path="/form"
           element={
