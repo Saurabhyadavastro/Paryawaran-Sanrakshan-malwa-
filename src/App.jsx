@@ -1,5 +1,6 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
+import { useEffect } from 'react'
 import LoginPage from './pages/LoginPage'
 import SubmissionForm from './pages/SubmissionForm'
 import AdminLogin from './pages/AdminLogin'
@@ -8,6 +9,17 @@ import './App.css'
 
 // Debug logging
 console.log('App.jsx loaded')
+
+// Component to log route changes
+function RouteLogger() {
+  const location = useLocation()
+  
+  useEffect(() => {
+    console.log('Current route:', location.pathname)
+  }, [location])
+  
+  return null
+}
 
 // ProtectedRoute component to guard routes that require authentication
 function ProtectedRoute({ children }) {
@@ -35,6 +47,7 @@ function App() {
   
   return (
     <Router>
+      <RouteLogger />
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route
