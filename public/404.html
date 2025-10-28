@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Paryavaran Sanrakshan</title>
-    <script>
-        // Store the path for the app to handle
-        sessionStorage.setItem('redirectPath', window.location.pathname);
-        // Redirect to index for client-side routing
-        window.location.replace('/');
-    </script>
 </head>
 <body>
+    <script>
+        // Get the current path
+        const path = window.location.pathname;
+        // Redirect to index.html with the path preserved
+        window.location.replace('/index.html' + path + window.location.search + window.location.hash);
+    </script>
     <p>Loading...</p>
 </body>
 </html>
