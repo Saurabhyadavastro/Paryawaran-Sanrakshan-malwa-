@@ -40,8 +40,6 @@ function App() {
         />
         <Route path="/admin" element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        {/* Catch-all route - redirect to home */}
-        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   )
