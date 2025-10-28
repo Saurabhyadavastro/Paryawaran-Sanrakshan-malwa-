@@ -5,14 +5,7 @@ services:
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
     pullRequestPreviewsEnabled: true
-    headers:
-      - path: /*
-        name: X-Frame-Options
-        value: SAMEORIGIN
-      - path: /*
-        name: X-Content-Type-Options
-        value: nosniff
     routes:
       - type: rewrite
-        source: /*
+        source: "/*"
         destination: /index.html
