@@ -6,9 +6,14 @@ import AdminLogin from './pages/AdminLogin'
 import AdminDashboard from './pages/AdminDashboard'
 import './App.css'
 
+// Debug logging
+console.log('App.jsx loaded')
+
 // ProtectedRoute component to guard routes that require authentication
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth()
+
+  console.log('ProtectedRoute check:', { user: !!user, loading })
 
   if (loading) {
     return (
@@ -26,6 +31,8 @@ function ProtectedRoute({ children }) {
 }
 
 function App() {
+  console.log('App component rendering')
+  
   return (
     <Router>
       <Routes>
