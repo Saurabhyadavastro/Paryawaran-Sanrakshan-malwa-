@@ -309,6 +309,4 @@ This project is open source and available under the [MIT License](LICENSE).
 **🌱 पर्यावरण बचाओ, भविष्य बनाओ | Save Environment, Build Future 🌍**
 
 Made with ❤️ for Malwa Region
-#   P a r y a w a r a n - S a n r a k s h a n - m a l w a - 
- 
- 
+#
