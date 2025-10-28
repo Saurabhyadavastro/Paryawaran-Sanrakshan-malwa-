@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirecting...</title>
+    <title>Paryavaran Sanrakshan</title>
     <script>
-        // Redirect to index.html for client-side routing
-        window.location.href = '/index.html' + window.location.pathname;
+        // Store the path for the app to handle
+        sessionStorage.setItem('redirectPath', window.location.pathname);
+        // Redirect to index for client-side routing
+        window.location.replace('/');
     </script>
 </head>
 <body>
-    <p>Redirecting...</p>
+    <p>Loading...</p>
 </body>
 </html>
