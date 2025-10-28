@@ -7,10 +7,16 @@
 </head>
 <body>
     <script>
-        // Get the current path
+        // Store the intended path
         const path = window.location.pathname;
-        // Redirect to index.html with the path preserved
-        window.location.replace('/index.html' + path + window.location.search + window.location.hash);
+        sessionStorage.setItem('intendedPath', path);
+        
+        // Redirect to index.html with hash
+        if (path.includes('/admin')) {
+            window.location.replace('/index.html#admin');
+        } else {
+            window.location.replace('/index.html' + window.location.search + window.location.hash);
+        }
     </script>
     <p>Loading...</p>
 </body>
