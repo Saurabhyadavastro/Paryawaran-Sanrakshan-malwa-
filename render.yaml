@@ -5,3 +5,14 @@ services:
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
     pullRequestPreviewsEnabled: true
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: public, max-age=0, must-revalidate
+    routes:
+      - type: rewrite
+        source: /(.*).html
+        destination: /$1
+      - type: rewrite
+        source: /*
+        destination: /index.html
