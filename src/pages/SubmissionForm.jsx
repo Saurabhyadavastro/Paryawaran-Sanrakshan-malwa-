@@ -38,7 +38,6 @@ function SubmissionForm() {
         work_description: data.work_description,
         result: data.result,
         google_drive_link: data.google_drive_link || null,
-        submitted_at: new Date().toISOString(),
       }
 
       console.log('Attempting to submit:', submissionData)
