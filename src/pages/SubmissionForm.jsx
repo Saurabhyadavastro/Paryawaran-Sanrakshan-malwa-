@@ -32,6 +32,7 @@ function SubmissionForm() {
     try {
       // Prepare the submission data
       const submissionData = {
+        user_email: 'anonymous@paryavaran.org', // Default email for anonymous submissions
         district: data.district,
         place: data.place,
         completed_by: data.completed_by,
