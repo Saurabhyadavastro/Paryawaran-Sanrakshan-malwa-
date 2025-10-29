@@ -250,9 +250,9 @@ function SubmissionForm() {
             />
           </motion.div>
           <h1 className="text-3xl md:text-4xl font-bold text-green-800 mb-2">
-            गतिविधि प्रस्तुति फॉर्म
+            पर्यावरण गतिविधि मालवा प्रांत (सफल प्रयोग)
           </h1>
-          <p className="text-green-700 text-lg">Activity Submission Form</p>
+          <p className="text-green-700 text-lg">Paryavaran Gathividhi Malwa Prant (Safal Prayog)</p>
         </div>
 
         {/* Success Message - Removed inline message since we have popup */}
@@ -282,14 +282,14 @@ function SubmissionForm() {
           {/* Place Field */}
           <div>
             <label htmlFor="place" className="block text-green-800 font-semibold mb-2">
-              स्थान (Place) <span className="text-red-500">*</span>
+              नगर/ग्राम <span className="text-red-500">*</span>
             </label>
             <input
               id="place"
               type="text"
               {...register('place', { required: 'यह फील्ड आवश्यक है' })}
               className="input-field"
-              placeholder="स्थान का नाम दर्ज करें"
+              placeholder="नगर/ग्राम का नाम दर्ज करें"
             />
             {errors.place && (
               <p className="text-red-500 text-sm mt-1">{errors.place.message}</p>
@@ -338,14 +338,14 @@ function SubmissionForm() {
           {/* Result Field */}
           <div>
             <label htmlFor="result" className="block text-green-800 font-semibold mb-2">
-              परिणाम (Result) <span className="text-red-500">*</span>
+              सफल प्रयोग (Sucess Stories) <span className="text-red-500">*</span>
             </label>
             <textarea
               id="result"
               {...register('result', { required: 'यह फील्ड आवश्यक है' })}
               rows="4"
               className="input-field resize-none"
-              placeholder="कार्य के परिणाम का विवरण लिखें..."
+              placeholder="सफल प्रयोग का विवरण लिखें..."
             />
             {errors.result && (
               <p className="text-red-500 text-sm mt-1">{errors.result.message}</p>
