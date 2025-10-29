@@ -347,14 +347,14 @@ function SubmissionForm() {
           {/* Work Description Field */}
           <div>
             <label htmlFor="work_description" className="block text-green-800 font-semibold mb-2">
-              कार्य का विवरण (Work Description) <span className="text-red-500">*</span>
+              सफल प्रयोग <span className="text-red-500">*</span>
             </label>
             <textarea
               id="work_description"
               {...register('work_description', { required: 'यह फील्ड आवश्यक है' })}
               rows="4"
               className="input-field resize-none"
-              placeholder="कार्य का विस्तृत विवरण लिखें..."
+              placeholder="सफल प्रयोग का विस्तृत विवरण लिखें..."
             />
             {errors.work_description && (
               <p className="text-red-500 text-sm mt-1">{errors.work_description.message}</p>
@@ -364,14 +364,14 @@ function SubmissionForm() {
           {/* Result Field */}
           <div>
             <label htmlFor="result" className="block text-green-800 font-semibold mb-2">
-              सफल प्रयोग (Sucess Stories) <span className="text-red-500">*</span>
+              परिणाम (Parinam) <span className="text-red-500">*</span>
             </label>
             <textarea
               id="result"
               {...register('result', { required: 'यह फील्ड आवश्यक है' })}
               rows="4"
               className="input-field resize-none"
-              placeholder="सफल प्रयोग का विवरण लिखें..."
+              placeholder="परिणाम का विवरण लिखें..."
             />
             {errors.result && (
               <p className="text-red-500 text-sm mt-1">{errors.result.message}</p>
