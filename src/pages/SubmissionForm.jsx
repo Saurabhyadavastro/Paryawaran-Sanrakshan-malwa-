@@ -1,15 +1,13 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { motion } from 'framer-motion'
-import { useAuth } from '../context/AuthContext'
+import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '../supabaseClient'
+import logo from '../IMG/Picture1.png'
 
 function SubmissionForm() {
-  const { user, signOut } = useAuth()
-  const navigate = useNavigate()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   
   const {
     register,
@@ -18,10 +16,14 @@ function SubmissionForm() {
     formState: { errors },
   } = useForm()
 
-  const handleLogout = async () => {
-    await signOut()
-    navigate('/')
-  }
+  // Loading animation effect
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 2000) // Show loading for 2 seconds
+
+    return () => clearTimeout(timer)
+  }, [])
 
   const onSubmit = async (data) => {
     setIsSubmitting(true)
@@ -30,14 +32,13 @@ function SubmissionForm() {
     try {
       // Prepare the submission data
       const submissionData = {
-        user_email: user.email,
-        user_id: user.id,
         district: data.district,
         place: data.place,
         completed_by: data.completed_by,
         work_description: data.work_description,
         result: data.result,
         google_drive_link: data.google_drive_link,
+        submitted_at: new Date().toISOString(),
       }
 
       // Insert into Supabase
@@ -65,6 +66,82 @@ function SubmissionForm() {
 
   const closeSuccessPopup = () => {
     setSubmitSuccess(false)
+  }
+
+  // Loading Animation Screen
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="text-center"
+        >
+          {/* Logo with Animation */}
+          <motion.div
+            animate={{
+              scale: [1, 1.1, 1],
+              rotate: [0, 5, -5, 0],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="mb-8"
+          >
+            <img
+              src={logo}
+              alt="Paryavaran Sanrakshan Logo"
+              className="w-48 h-48 mx-auto object-contain drop-shadow-2xl"
+            />
+          </motion.div>
+
+          {/* Loading Text */}
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="text-3xl font-bold text-green-800 mb-4"
+          >
+            पर्यावरण संरक्षण
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="text-green-600 text-lg"
+          >
+            Loading...
+          </motion.p>
+
+          {/* Loading Spinner */}
+          <motion.div
+            className="mt-6 flex justify-center space-x-2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.7 }}
+          >
+            <motion.div
+              className="w-3 h-3 bg-green-600 rounded-full"
+              animate={{ y: [0, -15, 0] }}
+              transition={{ duration: 0.6, repeat: Infinity, delay: 0 }}
+            />
+            <motion.div
+              className="w-3 h-3 bg-green-600 rounded-full"
+              animate={{ y: [0, -15, 0] }}
+              transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }}
+            />
+            <motion.div
+              className="w-3 h-3 bg-green-600 rounded-full"
+              animate={{ y: [0, -15, 0] }}
+              transition={{ duration: 0.6, repeat: Infinity, delay: 0.4 }}
+            />
+          </motion.div>
+        </motion.div>
+      </div>
+    )
   }
 
   return (
@@ -158,25 +235,24 @@ function SubmissionForm() {
         transition={{ duration: 0.6, delay: 0.2 }}
         className="max-w-3xl mx-auto"
       >
-        {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-green-800 mb-2">
-              गतिविधि प्रस्तुति फॉर्म
-            </h1>
-            <p className="text-green-700">Activity Submission Form</p>
-            {user && (
-              <p className="text-sm text-green-600 mt-2">
-                Logged in as: {user.email}
-              </p>
-            )}
-          </div>
-          <button
-            onClick={handleLogout}
-            className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-200 shadow-md"
+        {/* Header with Logo */}
+        <div className="text-center mb-8">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", stiffness: 200, delay: 0.3 }}
+            className="mb-6"
           >
-            Logout
-          </button>
+            <img
+              src={logo}
+              alt="Paryavaran Sanrakshan Logo"
+              className="w-32 h-32 mx-auto object-contain drop-shadow-lg"
+            />
+          </motion.div>
+          <h1 className="text-3xl md:text-4xl font-bold text-green-800 mb-2">
+            गतिविधि प्रस्तुति फॉर्म
+          </h1>
+          <p className="text-green-700 text-lg">Activity Submission Form</p>
         </div>
 
         {/* Success Message - Removed inline message since we have popup */}
