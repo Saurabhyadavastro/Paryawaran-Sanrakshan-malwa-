@@ -65,9 +65,20 @@ function SubmissionForm() {
       console.error('Error hint:', error.hint)
       
       let errorMessage = 'फॉर्म सबमिट करने में त्रुटि। कृपया पुनः प्रयास करें।\n\n'
-      if (error.message) {
+      
+      // Check for RLS policy error
+      if (error.message && error.message.includes('row-level security policy')) {
+        errorMessage = 'Database Security Error!\n\n'
+        errorMessage += 'Please configure Supabase:\n'
+        errorMessage += '1. Go to Supabase Dashboard\n'
+        errorMessage += '2. Go to Authentication > Policies\n'
+        errorMessage += '3. Add INSERT policy for "submissions" table\n'
+        errorMessage += '4. Enable public access or disable RLS\n\n'
+        errorMessage += 'Error: ' + error.message
+      } else if (error.message) {
         errorMessage += 'Error: ' + error.message
       }
+      
       if (error.hint) {
         errorMessage += '\nHint: ' + error.hint
       }
