@@ -37,9 +37,11 @@ function SubmissionForm() {
         completed_by: data.completed_by,
         work_description: data.work_description,
         result: data.result,
-        google_drive_link: data.google_drive_link,
+        google_drive_link: data.google_drive_link || null,
         submitted_at: new Date().toISOString(),
       }
+
+      console.log('Attempting to submit:', submissionData)
 
       // Insert into Supabase
       const { data: insertedData, error } = await supabase
@@ -48,6 +50,7 @@ function SubmissionForm() {
         .select()
 
       if (error) {
+        console.error('Supabase error details:', error)
         throw error
       }
 
@@ -58,7 +61,19 @@ function SubmissionForm() {
       console.log('Submission successful:', insertedData)
     } catch (error) {
       console.error('Error submitting form:', error)
-      alert('फॉर्म सबमिट करने में त्रुटि। कृपया पुनः प्रयास करें।')
+      console.error('Error message:', error.message)
+      console.error('Error details:', error.details)
+      console.error('Error hint:', error.hint)
+      
+      let errorMessage = 'फॉर्म सबमिट करने में त्रुटि। कृपया पुनः प्रयास करें।\n\n'
+      if (error.message) {
+        errorMessage += 'Error: ' + error.message
+      }
+      if (error.hint) {
+        errorMessage += '\nHint: ' + error.hint
+      }
+      
+      alert(errorMessage)
     } finally {
       setIsSubmitting(false)
     }
