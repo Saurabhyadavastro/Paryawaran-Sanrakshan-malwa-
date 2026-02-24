@@ -12,12 +12,47 @@
 ## 📖 विषय-सूची | Table of Contents
 
 - [परिचय | Introduction](#-परिचय--introduction)
+- [⚡ महत्वपूर्ण बदलाव | Important Changes](#-महत्वपूर्ण-बदलाव--important-changes)
 - [मुख्य विशेषताएं | Key Features](#-मुख्य-विशेषताएं--key-features)
 - [तकनीकी स्टैक | Tech Stack](#-तकनीकी-स्टैक--tech-stack)
 - [इंस्टालेशन | Installation](#-इंस्टालेशन--installation)
 - [उपयोग | Usage](#-उपयोग--usage)
 - [प्रोजेक्ट संरचना | Project Structure](#-प्रोजेक्ट-संरचना--project-structure)
 - [योगदान | Contributing](#-योगदान--contributing)
+
+## ⚡ महत्वपूर्ण बदलाव | Important Changes
+
+### 🔄 Supabase Migration (February 2026)
+
+**पिछला Supabase प्रोजेक्ट 90+ दिनों की निष्क्रियता के कारण pause हो गया था। इस अपडेट में:**
+
+#### ✅ क्या बदला | What Changed:
+- **Database Schema Updated**: 
+  - `id`: `BIGSERIAL` → `UUID` (बेहतर सुरक्षा)
+  - `user_id` फ़ील्ड हटाई गई (anonymous submissions के लिए)
+  - सभी फ़ील्ड अब optional (अधिक लचीलापन)
+
+- **Environment Variables**: 
+  - Credentials अब `.env` फाइल में (सुरक्षित)
+  - Code में hardcoded values नहीं
+  - `.env.example` टेम्पलेट शामिल
+
+- **RLS Policies Updated**:
+  - Public read access (सभी submissions देख सकते हैं)
+  - Public insert access (anonymous submissions)
+
+#### 📋 Migration के लिए | For Migration:
+यदि आप पुराने प्रोजेक्ट से migrate कर रहे हैं:
+
+1. नया Supabase प्रोजेक्ट बनाएं
+2. नया schema SQL चलाएं (Installation सेक्शन देखें)
+3. `.env` फाइल में नए credentials डालें
+4. पुराने data को import करने के लिए SQL export/import उपयोग करें
+
+#### ⚠️ Breaking Changes:
+- पुरानी Supabase credentials काम नहीं करेंगी
+- Schema में बदलाव के कारण API response format अलग है
+- हर developer को अपना Supabase प्रोजेक्ट बनाना होगा
 
 ## 🌍 परिचय | Introduction
 
@@ -115,42 +150,59 @@ npm install
 
 3️⃣ **Supabase सेटअप करें**
 - [Supabase](https://supabase.com) पर नया प्रोजेक्ट बनाएं
-- Database में निम्न टेबल बनाएं:
+- Database → SQL Editor में जाएं
+- निम्न SQL कमांड चलाएं:
 
 ```sql
--- Submissions Table
-CREATE TABLE submissions (
-  id BIGSERIAL PRIMARY KEY,
+-- Submissions Table (Updated Schema)
+CREATE TABLE public.submissions (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   user_email TEXT NOT NULL,
-  user_id UUID NOT NULL,
-  district TEXT NOT NULL,
-  place TEXT NOT NULL,
-  completed_by TEXT NOT NULL,
-  work_description TEXT NOT NULL,
-  result TEXT NOT NULL,
+  district TEXT,
+  place TEXT,
+  completed_by TEXT,
+  work_description TEXT,
+  result TEXT,
   google_drive_link TEXT
 );
 
 -- Enable Row Level Security
-ALTER TABLE submissions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.submissions ENABLE ROW LEVEL SECURITY;
 
--- Policy: Allow authenticated users to read all
-CREATE POLICY "Allow authenticated read" ON submissions
-  FOR SELECT TO authenticated USING (true);
+-- Policy: Allow public to read all submissions
+CREATE POLICY "Allow public read" 
+  ON public.submissions
+  FOR SELECT 
+  USING (true);
 
--- Policy: Allow users to insert their own data
-CREATE POLICY "Allow authenticated insert" ON submissions
-  FOR INSERT TO authenticated 
-  WITH CHECK (auth.uid() = user_id);
+-- Policy: Allow public to insert (for anonymous submissions)
+CREATE POLICY "Allow public insert" 
+  ON public.submissions
+  FOR INSERT 
+  WITH CHECK (true);
+
+-- Create index for better performance
+CREATE INDEX idx_submissions_created_at 
+  ON public.submissions(created_at DESC);
 ```
 
 4️⃣ **एनवायरनमेंट वेरिएबल सेट करें**
-`src/supabaseClient.js` में अपनी Supabase क्रेडेंशियल्स अपडेट करें:
-```javascript
-const supabaseUrl = 'YOUR_SUPABASE_URL'
-const supabaseAnonKey = 'YOUR_SUPABASE_ANON_KEY'
+
+Supabase Project Settings → API से अपनी credentials कॉपी करें:
+
+- `.env.example` को `.env` में कॉपी करें:
+```bash
+cp .env.example .env
 ```
+
+- `.env` फाइल में अपनी credentials भरें:
+```env
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+**⚠️ महत्वपूर्ण:** `.env` फाइल को कभी भी Git में commit न करें!
 
 5️⃣ **डेवलपमेंट सर्वर चलाएं**
 ```bash
